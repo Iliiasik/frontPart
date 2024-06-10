@@ -1,0 +1,36 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+    <div class="profile-container">
+        <div class="left-section">
+            <img src="{{ user.profile.photo.url }}" alt="Profile Photo" class="profile-photo">
+            <p>{{ user.email }}</p>
+        </div>
+        <div class="right-section">
+            <form method="post" action="{% url 'profile_update' %}">
+                {% csrf_token %}
+                <textarea name="description" class="description-field">{{ user.profile.description }}</textarea>
+                <button type="submit" class="save-button">Save</button>
+            </form>
+        </div>
+    </div>
+    <div class="ads-section">
+        <h2>Ваши объявления</h2>
+        <div class="ads-list">
+            {% for ad in user_ads %}
+                <div class="ad-item">
+                    <h3>{{ ad.title }}</h3>
+                    <p>{{ ad.description }}</p>
+                    <p>Цена: {{ ad.price }} сом</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

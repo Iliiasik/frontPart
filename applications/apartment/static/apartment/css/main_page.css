@@ -1,0 +1,199 @@
+/* applications/apartment/static/apartment/css/main_page.css */
+@font-face {
+        font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 300;
+        src: url('../fonts/montserrat-v26-cyrillic_latin-300.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+    }
+body{
+        font-family: 'Montserrat';
+    }
+
+
+.apartment-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    width: calc(33.33% - 20px); /* 33.33% width for each card with margin */
+    display: inline-block;
+    vertical-align: top; /* Align cards to the top */
+    box-sizing: border-box; /* Include padding and border in width calculation */
+    text-align: left; /* Align text to the left */
+}
+
+/* Clearfix to prevent wrapping */
+.apartment-list::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.apartment-images img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    max-width: 70px;
+    max-height: 40px;
+}
+
+.buttons button {
+    margin-right: 10px;
+    padding: 10px 20px; /* увеличен размер кнопки */
+    font-size: 1rem; /* увеличен размер текста */
+}
+
+.profile-button {
+    margin-left: auto;
+}
+
+.profile-button button {
+    padding: 10px 20px; /* увеличен размер кнопки */
+    font-size: 1rem; /* увеличен размер текста */
+}
+
+.slogan {
+    text-align: center;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+main {
+    padding: 20px;
+}
+
+.block1 {
+    margin-bottom: 20px;
+}
+
+.banner-container {
+    display: flex;
+    overflow-x: auto;
+}
+
+.banner img {
+    width: 100%;
+    max-width: 300px;
+    margin-right: 10px;
+}
+
+.block2 {
+    margin-bottom: 20px;
+}
+
+.service-cards {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.service-card {
+    flex: 1 1 300px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.service-card p {
+    margin: 0;
+}
+
+.details-button {
+    padding: 10px 20px; /* увеличен размер кнопки */
+    font-size: 1rem; /* увеличен размер текста */
+}
+
+.block3 {
+    text-align: center;
+}
+
+.banner2 img {
+    max-width: 100%;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-text, .contact-info {
+    line-height: 1.6;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.footer-text p, .contact-info p {
+    margin: 5px 0;
+}
+
+.contact-info {
+    margin-top: 20px;
+}
+
+.contact-info p {
+    margin: 0;
+    padding: 0 10px; /* Добавляем отступы между пунктами */
+}
+
+.contact-info a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 5px; /* Добавляем небольшой отступ между иконкой и текстом ссылки */
+}
+
+/* New button style */
+.btn-new {
+    border-radius: 10px;
+    color: white;
+    transition: .2s linear;
+    background: #0B63F6;
+}
+
+.btn-new:hover {
+    box-shadow: #003CC5 0 0px 0px 40px inset;
+}
+
+/* Apply .btn-new style to all buttons */
+.buttons button,
+.profile-button button,
+.details-button {
+    border-radius: 10px;
+    color: white;
+    transition: .2s linear;
+    background: #0B63F6;
+}
+
+.buttons button:hover,
+.profile-button button:hover,
+.details-button:hover {
+    box-shadow: #003CC5 0 0px 0px 40px inset;
+}
