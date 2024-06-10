@@ -20,20 +20,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            messages.success(request, f'Your account has been created! You are now logged in as {username}')
-            return redirect('home')
-    else:
-        form = UserCreationForm()
-    return render(request, 'apartmen/register.html', {'form': form})
+def register_view(request):
+    return render(request, 'apartmen/register.html')
+
+def register_done(request):
+    return render(request, 'apartmen/registration_success.html')
 
 
 
@@ -48,12 +39,14 @@ class RegisterAPIView(APIView):
 class ActivationAPIView(APIView):
     def get(self, request, activation_code):
         user = get_object_or_404(User, activation_code=activation_code)
-        user.is_active = True
-        user.activation_code = ''
-        user.save(update_fields=['is_active', 'activation_code'])
-        return Response('Успешно', status=200)
-
-
+        if user.is_active:
+            message = "Ваш аккаунт уже активирован."
+        else:
+            user.is_active = True
+            user.activation_code = ''
+            user.save(update_fields=['is_active', 'activation_code'])
+            message = "Ваш аккаунт успешно активирован."
+        return render(request, 'apartmen/activation.html', {'message': message})
 class ChangePasswordAPIView(APIView):
     permission_classes = [IsAuthenticated]
 

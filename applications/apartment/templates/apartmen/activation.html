@@ -1,0 +1,20 @@
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Активация аккаунта</title>
+    <link rel="stylesheet" href="{% static 'apartment/css/activation.css' %}">
+</head>
+<body>
+<header>
+    <h1>Активация аккаунта</h1>
+</header>
+
+<main class="activation-container">
+    <h2>{{ message }}</h2>
+    <a href="{% url 'login' %}" class="button">Вход</a>
+</main>
+
+</body>
+</html>

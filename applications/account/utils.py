@@ -14,7 +14,7 @@ def send_activation_code(email, code):
         [email],
     )
 
-    email_message.attach_file('C:/Users/user/Desktop/project_x/emailimages/logo.png')
+    email_message.attach_file('emailimages/logo_x.png')
 
     email_message.send()
 

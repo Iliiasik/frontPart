@@ -1,34 +1,62 @@
-{% load static %}
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
-    <link rel="stylesheet" href="{% static 'apartment/css/register.css' %}">
 </head>
 <body>
-<header>
-</header>
-
-<main class="register-container">
-    <h2>Регистрация</h2>
-    <form method="post" class="register-form">
-        {% csrf_token %}
-        <label for="username">Имя пользователя:</label><br>
-        <input type="text" id="username" name="username" required><br>
+    <h1>Форма регистрации</h1>
+    <form id="registrationForm">
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" required><br>
-        <label for="password">Пароль:</label><br>
-        <input type="password" id="password" name="password" required><br>
-        <label for="password_confirm">Подтверждение пароля:</label><br>
-        <input type="password" id="password_confirm" name="password_confirm" required><br>
-        <button type="submit" class="register-button">Зарегистрироваться</button>
-    </form>
-    <div class="links">
-        <a href="{% url 'login' %}" class="link">Вход</a>
-        <a href="/" class="link">На главную</a>
-    </div>
-</main>
 
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br>
+
+        <label for="password_confirm">Confirm Password:</label><br>
+        <input type="password" id="password_confirm" name="password_confirm" required><br>
+
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="surname">Surname:</label><br>
+        <input type="text" id="surname" name="surname" required><br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const data = {
+                email: formData.get('email'),
+                password: formData.get('password'),
+                password2: formData.get('password_confirm'),
+                name: formData.get('name'),
+                surname: formData.get('surname')
+            };
+
+            fetch('/api/v1/account/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/api/v1/account/register_done/'; // Перенаправляем пользователя на страницу успешной регистрации
+                } else {
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка регистрации! Попробуйте еще раз позже.');
+            });
+        });
+    </script>
 </body>
 </html>
