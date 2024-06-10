@@ -1,10 +1,97 @@
+<!DOCTYPE html>
 {% load static %}
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ apartment.title }}</title>
-    <link rel="stylesheet" href="{% static 'apartment/css/detail_page.css' %}">
+    <style>
+        body {
+            font-family: "Segoe UI Semibold", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo img {
+            height: 40px;
+        }
+        .buttons button {
+            margin-right: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-family: "Segoe UI Semibold", sans-serif;
+        }
+        .profile-button {
+            margin-left: auto;
+        }
+        .profile-button button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: "Segoe UI Semibold", sans-serif;
+        }
+        .profile-button button:hover {
+            background-color: #45a049;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        main {
+            padding: 20px;
+        }
+        .apartment-detail {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .apartment-images img {
+            max-width: 100%;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        .footer-content {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .contact-info p, .footer-text p {
+            margin: 5px 0;
+        }
+        .contact-info a, .footer-text a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .contact-info a:hover, .footer-text a:hover {
+            text-decoration: underline;
+        }
+        .btn-new {
+            border-radius: 10px;
+            color: white;
+            transition: .2s linear;
+            background: #659ff8;
+            padding: 8px 16px;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-new:hover {
+            box-shadow: #4281f8 0 0px 0px 40px inset;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -15,7 +102,6 @@
         </div>
         <div class="profile-button">
             <button class="profile-button" onclick="window.location.href='/profile/'">
-                <img src="{% static 'apartment/img/icon-profile.png' %}" alt="Иконка профиля">
                 <span>Личный кабинет</span>
             </button>
         </div>
@@ -29,12 +115,11 @@
                 <img src="{{ image.image.url }}" width="275" height="275" style="border-radius: 21%; display: inline-block;">
                 {% endfor %}
             </div>
-            <p><strong>Owner:</strong> {{ apartment.owner.username }}</p>
-            <p><strong>Category:</strong> {{ apartment.category.name }}</p>
-            <p><strong>Location:</strong> {{ apartment.location }}</p>
-            <p><strong>Price:</strong> {{ apartment.price }} сом</p>
-            <p><strong>Price in Dollars:</strong> {{ apartment.price_dollar }} $</p>
-            <p><strong>Amenities:</strong>
+            <p><strong>Хозяин:</strong> {{ apartment.owner.username }}</p>
+            <p><strong>Категория:</strong> {{ apartment.category.name }}</p>
+            <p><strong>Местоположение:</strong> {{ apartment.location }}</p>
+            <p><strong>Цена:</strong> {{ apartment.price }} сом</p>
+            <p><strong>Цена в долларах:</strong> {{ apartment.price_dollar }} $</p>
                 {% for amenity in apartment.amenities.all %}
                     {{ amenity.name }}{% if not forloop.last %}, {% endif %}
                 {% endfor %}
@@ -47,14 +132,14 @@
     <footer>
         <div class="footer-content">
             <div class="contact-info">
-                <p>Contact us:</p>
+                <p>Свяжитесь с нами:</p>
                 <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/your_number" target="_blank">WhatsApp</a></p>
                 <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/your_profile" target="_blank">Instagram</a></p>
                 <p><i class="far fa-envelope"></i> <a href="mailto:your_email@example.com">Email</a></p>
                 <p><i class="fab fa-telegram-plane"></i> <a href="https://t.me/whyupepe" target="_blank">Telegram</a></p>
             </div>
             <div class="footer-text">
-                <p>© 2024, «Nedvizhimost»™. All rights reserved.</p>
+                <p>© 2024, «Nedvizhimost»™. Все права защищены.</p>
             </div>
         </div>
     </footer>

@@ -1,25 +1,153 @@
 {% load static %}
 
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Вход</title>
     <link rel="stylesheet" href="{% static 'apartment/css/login.css' %}">
+    <style>
+        body {
+            font-family: "Segoe UI Semibold", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo img {
+            height: 40px;
+        }
+        .wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+        .form-signin {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .footer-content {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .contact-info p, .footer-text p {
+            margin: 5px 0;
+        }
+        .contact-info a, .footer-text a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .contact-info a:hover, .footer-text a:hover {
+            text-decoration: underline;
+        }
+        .btn-new {
+            border-radius: 10px;
+            color: white;
+            transition: .2s linear;
+            background: #659ff8;
+            padding: 8px 16px;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-new:hover {
+            box-shadow: #4281f8 0 0px 0px 40px inset;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .btn-register, .btn-reset {
+            background: #66cc66; /* светло-зеленый для регистрации */
+            height: 36px; /* уменьшенная высота кнопки */
+            flex: 1; /* равный размер */
+            margin: 0 5px; /* небольшое расстояние между кнопками */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn-reset {
+            background: #ff6666; /* светло-красный для восстановления пароля */
+        }
+        .btn-register:hover {
+            box-shadow: #44aa44 0 0px 0px 40px inset;
+        }
+        .btn-reset:hover {
+            box-shadow: #ff4444 0 0px 0px 40px inset;
+        }
+        .btn-register a, .btn-reset a {
+            color: white; /* цвет текста белый */
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+        }
+        .messages {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .messages li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .messages.error {
+            background-color: #ffcccc;
+            color: #cc0000;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <a href="/">
+                <img src="{% static 'apartment/img/logo_3.png' %}"  width="40" height="40">
+            </a>
+        </div>
+    </header>
+
     <div class="wrapper">
         <form class="form-signin" method="post" action="{% url 'login' %}">
             {% csrf_token %}
-            <h2 class="form-signin-heading">Please login</h2>
-            <input type="email" class="form-control" name="username" placeholder="Email Address" required="" autofocus="" />
-            <input type="password" class="form-control" name="password" placeholder="Password" required=""/>      
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+            <h2 class="form-signin-heading">Пожалуйста, войдите</h2>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <input type="email" class="form-control" name="username" placeholder="Адрес электронной почты" required autofocus />
+            <input type="password" class="form-control" name="password" placeholder="Пароль" required />
+            <button class="btn-new" type="submit">Войти</button>
             <div class="button-group">
-                <a href="{% url 'register_view' %}" class="btn btn-secondary">Зарегистрироваться</a>
-                <a href="{% url 'password_reset' %}" class="btn btn-secondary">Восстановить пароль</a>
+                <div class="btn-new btn-register"><a href="{% url 'register_view' %}">Зарегистрироваться</a></div>
+                <div class="btn-new btn-reset"><a href="{% url 'password_reset' %}">Восстановить пароль</a></div>
             </div>
         </form>
     </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>© 2024, «Nedvizhimost»™. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

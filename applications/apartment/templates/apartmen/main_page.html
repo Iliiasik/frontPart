@@ -55,10 +55,12 @@
 
         /* Стиль логотипа */
         .logo img {
-            max-width: 70px;
-            max-height: 40px;
+            max-width: 80px;
+            max-height: 50px;
         }
-
+.logo {
+    margin-right: 20px; /* Добавляем отступ справа */
+}
         /* Стиль кнопок */
         .buttons button {
             margin-right: 10px;
@@ -212,6 +214,7 @@
         font-size: 1rem;
         border: none;
         cursor: pointer;
+        text-decoration: none;
     }
 
     .btn-new:hover {
@@ -295,7 +298,7 @@
                         <p>Цена: {{ apartment.price }} сом</p>
                         <p>Цена в долларах: {{ apartment.price_dollar }} $</p>
                         <p>Описание: {{ apartment.description }}</p>
-                        <a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a>
+                        <div style="text-align: center;"><a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a></div>
                     </div>
                 {% endfor %}
             {% endif %}

@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
-    path('login/', auth_views.LoginView.as_view(template_name='apartmen/login.html'), name='login'),
+    path('login/', views.login_view, name='login'),
     # path('login/', TokenObtainPairView.as_view()),
     path('refresh/', TokenRefreshView.as_view()),
     path('register/', RegisterAPIView.as_view()),
@@ -24,5 +24,6 @@ urlpatterns = [
     path('forgot_password_confirm/', ForgotPasswordConfirmAPIView.as_view()),
     path('owner-apartment/', views.OwnerUserApartmentAPIView.as_view(), name='owner_apartment'),
     path('owner_apartment_info/<str:email>/', OwnerApartmentInfoByEmailView.as_view(), name='owner_apartment_info_by_email'),
-    path('test_celery/', send_mail_view)
+    path('test_celery/', send_mail_view),
+    path('profile/', views.profile_view, name='profile_view'),
 ]

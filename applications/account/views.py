@@ -13,12 +13,29 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 
+
 User = get_user_model()
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('profile_view')  # Перенаправление на страницу профиля после успешного входа
+        else:
+            messages.error(request, 'Неверный адрес электронной почты или пароль.')
+
+    return render(request, 'apartmen/login.html')
+
+def profile_view(request):
+    return render(request, 'apartmen/profile.html')
 
 def register_view(request):
     return render(request, 'apartmen/register.html')

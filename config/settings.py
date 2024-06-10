@@ -30,7 +30,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
-
+LOGIN_REDIRECT_URL = '/api/v1/account/user-info/'
 # Application definition
 
 INSTALLED_APPS = [
