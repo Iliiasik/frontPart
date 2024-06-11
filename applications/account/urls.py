@@ -26,4 +26,5 @@ urlpatterns = [
     path('owner_apartment_info/<str:email>/', OwnerApartmentInfoByEmailView.as_view(), name='owner_apartment_info_by_email'),
     path('test_celery/', send_mail_view),
     path('profile/', views.profile_view, name='profile_view'),
+
 ]

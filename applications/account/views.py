@@ -12,6 +12,9 @@ from rest_framework import generics
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 
 User = get_user_model()
@@ -20,6 +23,35 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
+
+# def create_apartment(request):
+#     if request.method == 'POST':
+#         # Получаем данные из запроса
+#         title = request.POST.get('title')
+#         category_id = request.POST.get('category_id')
+#         location = request.POST.get('location')
+#         price = request.POST.get('price')
+#         price_dollar = request.POST.get('price_dollar')
+#         education = request.POST.get('education')
+#         description = request.POST.get('description')
+#
+#         # Создаем новое объявление
+#         new_apartment = Apartment.objects.create(
+#             title=title,
+#             category_id=category_id,
+#             location=location,
+#             price=price,
+#             price_dollar=price_dollar,
+#             education=education,
+#             description=description
+#         )
+#
+#         # Возвращаем успешный ответ
+#         return JsonResponse({'success': True})
+#     else:
+#         # Возвращаем ошибку, если метод запроса не POST
+#         return JsonResponse({'error': 'Метод запроса должен быть POST'})
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -36,6 +68,7 @@ def login_view(request):
 
 def profile_view(request):
     return render(request, 'apartmen/profile.html')
+
 
 def register_view(request):
     return render(request, 'apartmen/register.html')
@@ -148,3 +181,6 @@ class OwnerApartmentInfoByEmailView(generics.RetrieveAPIView):
         except User.DoesNotExist:
             return Response({'detail': 'Владелец квартиры с указанным email не найден.'}, status=status.HTTP_404_NOT_FOUND)
 
+@login_required
+def home(request):
+    return render(request, 'main_page.html')

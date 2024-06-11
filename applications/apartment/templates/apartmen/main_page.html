@@ -58,9 +58,10 @@
             max-width: 80px;
             max-height: 50px;
         }
-.logo {
-    margin-right: 20px; /* Добавляем отступ справа */
-}
+        .logo {
+            margin-right: 20px; /* Добавляем отступ справа */
+        }
+
         /* Стиль кнопок */
         .buttons button {
             margin-right: 10px;
@@ -90,6 +91,11 @@
         .profile-button button:hover {
             background-color: #45a049; /* Изменение цвета фона при наведении */
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Увеличение тени при наведении */
+        }
+
+        /* Стиль кнопки выхода */
+        .logout-button {
+            background-color: #ff3333;
         }
 
         /* Стиль слогана */
@@ -147,8 +153,7 @@
         }
 
         /* Стиль кнопки "Подробнее" */
-        .details-button {
-            padding: 10px 20px; /* Увеличенный размер кнопки */
+        .details-button {            padding: 10px 20px; /* Увеличенный размер кнопки */
             font-size: 1rem; /* Увеличенный размер текста */
         }
 
@@ -203,52 +208,53 @@
             color: #fff;
             text-decoration: none;
             margin-left: 5px; /* Добавляем небольшой отступ между и текстом ссылки */
-}
-            /* Новый стиль кнопок */
-    .btn-new {
-        border-radius: 10px;
-        color: white;
-        transition: .2s linear;
-        background: #659ff8;
-        padding: 8px 16px;
-        font-size: 1rem;
-        border: none;
-        cursor: pointer;
-        text-decoration: none;
-    }
+        }
 
-    .btn-new:hover {
-        box-shadow: #4281f8 0 0px 0px 40px inset;
-    }
+        /* Новый стиль кнопок */
+        .btn-new {
+            border-radius: 10px;
+            color: white;
+            transition: .2s linear;
+            background: #659ff8;
+            padding: 8px 16px;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
 
-    /* Стиль фильтров */
-    .filters {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
+        .btn-new:hover {
+            box-shadow: #4281f8 0 0px 0px 40px inset;
+        }
 
-    .filters button {
-        margin: 5px;
-    }
+        /* Стиль фильтров */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
 
-    /* Стиль поиска */
-    .search {
-        margin-bottom: 20px;
-    }
+        .filters button {
+            margin: 5px;
+        }
 
-    .search input {
-        margin-right: 10px;
-    }
+        /* Стиль поиска */
+        .search {
+            margin-bottom: 20px;
+        }
 
-    /* Стиль списка квартир */
-    .apartment-list {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-</style>
+        .search input {
+            margin-right: 10px;
+        }
+
+        /* Стиль списка квартир */
+        .apartment-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -267,134 +273,159 @@
             <button class="btn-new" onclick="filterListings('Campings')">Кемпинги</button>
         </div>
         <div class="profile-button">
-            <button class="btn-new" onclick="window.location.href='/api/v1/account/login/'">
-                <span>Личный кабинет</span>
-            </button>
-        </div>
-    </header>
-<main>
-    <section class="search">
-        <input type="text" id="search-input" placeholder="Поиск..." value="{{ search_query }}" oninput="searchListings()">
-        <input type="number" id="min-price" placeholder="Мин. цена" oninput="searchListings()">
-        <input type="number" id="max-price" placeholder="Макс. цена" oninput="searchListings()">
-        <div id="search-results"></div>
-    </section>
-
-    <section class="apartments">
-        <h2>{{ category_name }}</h2>
-        <div class="apartment-list">
-            {% if no_apartments %}
-                <p>Упс, вы здесь первый!</p>
+            {% if user.is_authenticated %}
+                <button class="btn-new" onclick="window.location.href='/api/v1/account/profile/'">
+                    Привет, {{ user.name }}!
+                </button>
+<!--                <button class="btn-new logout-button" onclick="logout()">-->
+<!--                Выйти-->
+<!--                </button>-->
             {% else %}
-                {% for apartment in apartments %}
-                    <div class="apartment-card">
-                        {% if apartment.images.all %}
-                            <div style="text-align: center;">
-                                <img src="{{ apartment.images.all.0.image.url }}" width="275" height="275" style="border-radius: 21%; display: inline-block;">
-                            </div>
-                        {% endif %}
-                        <h3>{{ apartment.title }}</h3>
-                        <p>Местоположение: {{ apartment.location }}</p>
-                        <p>Цена: {{ apartment.price }} сом</p>
-                        <p>Цена в долларах: {{ apartment.price_dollar }} $</p>
-                        <p>Описание: {{ apartment.description }}</p>
-                        <div style="text-align: center;"><a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a></div>
-                    </div>
-                {% endfor %}
+                <button class="btn-new" onclick="window.location.href='/api/v1/account/login/'">
+                    Личный кабинет
+                </button>
             {% endif %}
         </div>
-    </section>
-</main>
+    </header>
+    <main>
+        <section class="search">
+            <input type="text" id="search-input" placeholder="Поиск..." value="{{ search_query }}" oninput="searchListings()">
+            <input type="number" id="min-price" placeholder="Мин. цена" oninput="searchListings()">
+            <input type="number" id="max-price" placeholder="Макс. цена" oninput="searchListings()">
+            <div id="search-results"></div>
+        </section>
 
-<footer>
-    <div class="footer-content">
-        <div class="contact-info">
-            <p>Свяжитесь с нами:</p>
-            <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/your_number" target="_blank">WhatsApp</a></p>
-            <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/your_profile" target="_blank">Instagram</a></p>
-            <p><i class="far fa-envelope"></i> <a href="mailto:your_email@example.com">Email</a></p>
-            <p><i class="fab fa-telegram-plane"></i> <a href="https://t.me/whyupepe" target="_blank">Telegram</a></p>
+        <section class="apartments">
+            <h2>{{ category_name }}</h2>
+            <div class="apartment-list">
+                {% if no_apartments %}
+                    <p>Упс, вы здесь первый!</p>
+                {% else %}
+                    {% for apartment in apartments %}
+                        <div class="apartment-card">
+                            {% if apartment.images.all %}
+                                <div style="text-align: center;">
+                                    <img src="{{ apartment.images.all.0.image.url }}" width="275" height="275" style="border-radius: 21%; display: inline-block;">
+                                </div>
+                            {% endif %}
+                            <h3>{{ apartment.title }}</h3>
+                            <p>Местоположение: {{ apartment.location }}</p>
+                            <p>Цена: {{ apartment.price }} сом</p>
+                            <p>Цена в долларах: {{ apartment.price_dollar }} $</p>
+                            <div style="text-align: center;"><a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a></div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="contact-info">
+                <p>Свяжитесь с нами:</p>
+                <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/your_number" target="_blank">WhatsApp</a></p>
+                <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/your_profile" target="_blank">Instagram</a></p>
+                <p><i class="far fa-envelope"></i> <a href="mailto:your_email@example.com">Email</a></p>
+                <p><i class="fab fa-telegram-plane"></i> <a href="https://t.me/whyupepe" target="_blank">Telegram</a></p>
+            </div>
+            <div class="footer-text">
+                <p>© 2024, «Nedvizhimost»™. Все права защищены.</p>
+            </div>
         </div>
-        <div class="footer-text">
-            <p>© 2024, «Nedvizhimost»™. Все права защищены.</p>
-        </div>
-    </div>
-</footer>
+    </footer>
 
+    <script>
+        function filterListings(category) {
+            const searchQuery = document.getElementById('search-input').value;
+            const minPrice = document.getElementById('min-price').value;
+            const maxPrice = document.getElementById('max-price').value;
+            const url = new URL(window.location.href);
+            url.searchParams.set('category', category);
+            if (searchQuery) {
+                url.searchParams.set('search', searchQuery);
+            }
+            if (minPrice) {
+                url.searchParams.set('min_price', minPrice);
+            } else {
+                url.searchParams.delete('min_price');
+            }
+            if (maxPrice) {
+                url.searchParams.set('max_price', maxPrice);
+            } else {
+                url.searchParams.delete('max_price');
+            }
+            window.location.href = url.toString();
+        }
 
-<script>
-    function filterListings(category) {
-        const searchQuery = document.getElementById('search-input').value;
-        const minPrice = document.getElementById('min-price').value;
-        const maxPrice = document.getElementById('max-price').value;
-        const url = new URL(window.location.href);
-        url.searchParams.set('category', category);
-        if (searchQuery) {
-            url.searchParams.set('search', searchQuery);
+        function searchListings() {
+            const searchQuery = document.getElementById('search-input').value;
+            const minPrice = document.getElementById('min-price').value;
+            const maxPrice = document.getElementById('max-price').value;
+            const url = new URL(window.location.href);
+            if (searchQuery) {
+                url.searchParams.set('search', searchQuery);
+            } else {
+                url.searchParams.delete('search');
+            }
+            if (minPrice) {
+                url.searchParams.set('min_price', minPrice);
+            } else {
+                url.searchParams.delete('min_price');
+            }
+            if (maxPrice) {
+                url.searchParams.set('max_price', maxPrice);
+            } else {
+                url.searchParams.delete('max_price');
+            }
+            window.history.pushState({}, '', url.toString());
+            fetch(url.toString())
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const apartmentList = doc.querySelector('.apartment-list').innerHTML;
+                    document.querySelector('.apartment-list').innerHTML = apartmentList;
+                });
         }
-        if (minPrice) {
-            url.searchParams.set('min_price', minPrice);
-        } else {
-            url.searchParams.delete('min_price');
-        }
-        if (maxPrice) {
-            url.searchParams.set('max_price', maxPrice);
-        } else {
-            url.searchParams.delete('max_price');
-        }
-        window.location.href = url.toString();
-    }
 
-    function searchListings() {
-        const searchQuery = document.getElementById('search-input').value;
-        const minPrice = document.getElementById('min-price').value;
-        const maxPrice = document.getElementById('max-price').value;
-        const url = new URL(window.location.href);
-        if (searchQuery) {
-            url.searchParams.set('search', searchQuery);
-        } else {
-            url.searchParams.delete('search');
-        }
-        if (minPrice) {
-            url.searchParams.set('min_price', minPrice);
-        } else {
-            url.searchParams.delete('min_price');
-        }
-        if (maxPrice) {
-            url.searchParams.set('max_price', maxPrice);
-        } else {
-            url.searchParams.delete('max_price');
-        }
-        window.history.pushState({}, '', url.toString());
-        fetch(url.toString())
-            .then(response => response.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html,'text/html');
-const apartmentList = doc.querySelector('.apartment-list').innerHTML;
-document.querySelector('.apartment-list').innerHTML = apartmentList;
-});
-}
-    document.addEventListener('DOMContentLoaded', () => {
-        const searchInput = document.getElementById('search-input');
-        const minPriceInput = document.getElementById('min-price');
-        const maxPriceInput = document.getElementById('max-price');
-        const urlParams = new URLSearchParams(window.location.search);
-        const searchQuery = urlParams.get('search');
-        const minPrice = urlParams.get('min_price');
-        const maxPrice = urlParams.get('max_price');
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('search-input');
+            const minPriceInput = document.getElementById('min-price');
+            const maxPriceInput = document.getElementById('max-price');
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get('search');
+            const minPrice = urlParams.get('min_price');
+            const maxPrice = urlParams.get('max_price');
 
-        if (searchQuery) {
-            searchInput.value = searchQuery;
-        }
-        if (minPrice) {
-            minPriceInput.value = minPrice;
-        }
-        if (maxPrice) {
-            maxPriceInput.value = maxPrice;
-        }
-    });
-</script>
+            if (searchQuery) {
+                searchInput.value = searchQuery;
+            }
+            if (minPrice) {
+                minPriceInput.value = minPrice;
+            }
+            if (maxPrice) {
+                maxPriceInput.value = maxPrice;
+            }
+        });
+//         function logout() {
+//     fetch('/', {
+//         method: 'POST', // Метод запроса для завершения сеанса (обычно POST)
+//         credentials: 'same-origin' // Передача учетных данных (токена аутентификации) для подтверждения идентификации пользователя
+//     }).then(response => {
+//         if (response.ok) {
+//             // Успешно разлогинили пользователя, можно выполнить какие-то дополнительные действия, например, перезагрузить страницу
+//             window.location.reload();
+//         } else {
+//             // Обработка ошибки, если что-то пошло не так при выходе из системы
+//             console.error('Ошибка при выходе из системы');
+//         }
+//     }).catch(error => {
+//         console.error('Произошла ошибка:', error);
+//     });
+// }
+    </script>
 </body>
 </html>
+
 
