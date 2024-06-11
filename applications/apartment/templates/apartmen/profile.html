@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Профиль</title>
     <link rel="stylesheet" href="{% static 'apartment/css/main_page.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             font-family: "Segoe UI Semibold", sans-serif;
@@ -113,6 +114,39 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        /* Новые стили для рамки с данными пользователя */
+        .user-profile {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            width: 50%;
+            margin: 50px auto;
+        }
+
+        .user-profile h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .user-profile table {
+            width: 100%;
+        }
+
+        .user-profile th,
+        .user-profile td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        .user-profile th {
+            width: 30%;
+        }
+
+        .user-profile td {
+            width: 70%;
+        }
     </style>
 </head>
 <body>
@@ -127,9 +161,7 @@
             <span>Выйти</span>
         </button>
         {% if user.is_authenticated %}
-            <button class="btn-new" onclick="openModal('profileModal')">
-                Редактировать профиль
-            </button>
+
             <button class="btn-new" onclick="openModal('listingModal')">
                 Выставить объявление
             </button>
@@ -137,33 +169,55 @@
     </div>
 </header>
 <main>
+    <div class="user-profile">
+        <h2>Данные пользователя</h2>
+        <table>
+            <tr>
+                <th>ФИО:</th>
+                <td>{{ user.name }}</td>
+            </tr>
+            <tr>
+                <th>Номер телефона:</th>
+                <td>+996{{ user.surname }}</td>
+            </tr>
+            <tr>
+                <th>Email:</th>
+                <td>{{ user.email }}</td>
+            </tr>
+        </table>
+    </div>
+
     {% if user.is_authenticated %}
-        <section class="your-listings">
-            <h2>Ваши объявления</h2>
-            <div class="apartment-list">
-                {% with apartments=user.apartment_set.all %}
-                    {% if apartments %}
-                        {% for apartment in apartments %}
-                            <div class="apartment-card">
-                                {% if apartment.images.all %}
-                                    <div style="text-align: center;">
-                                        <img src="{{ apartment.images.all.0.image.url }}" width="275" height="275" style="border-radius: 21%; display: inline-block;">
-                                    </div>
-                                {% endif %}
-                                <h3>{{ apartment.title }}</h3>
-                                <p>Местоположение: {{ apartment.location }}</p>
-                                <p>Цена: {{ apartment.price }} сом</p>
-                                <p>Цена в долларах: {{ apartment.price_dollar }} $</p>
-                                <p>Описание: {{ apartment.description }}</p>
-                                <div style="text-align: center;"><a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a></div>
+    <section class="your-listings">
+    <h2 style="text-align: center; border: 1px solid #ccc; padding: 10px;">Ваши объявления</h2>
+    <div class="apartment-list">
+        {% with apartments=user.apartment_set.all %}
+            {% if apartments %}
+                {% for apartment in apartments %}
+                    <div class="apartment-card">
+                        {% if apartment.images.all %}
+                            <div style="text-align: center;">
+                                <img src="{{ apartment.images.all.0.image.url }}" width="275" height="275" style="border-radius: 21%; display: inline-block;">
                             </div>
-                        {% endfor %}
-                    {% else %}
-                        <p>У вас пока нет объявлений.</p>
-                    {% endif %}
-                {% endwith %}
-            </div>
-        </section>
+                        {% endif %}
+                        <h3>{{ apartment.title }}</h3>
+                        <p>Местоположение: {{ apartment.location }}</p>
+                        <p>Цена: {{ apartment.price }} сом</p>
+                        <p>Цена в долларах: {{ apartment.price_dollar }} $</p>
+                        <p>Описание: {{ apartment.description }}</p>
+                        <div style="text-align: center;">
+                            <a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a>
+                            <button class="btn-new" onclick="deleteApartment('{{ apartment.id }}')">Удалить</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p style="text-align: center;">У вас пока нет объявлений.</p>
+            {% endif %}
+        {% endwith %}
+    </div>
+</section>
+
     {% endif %}
 </main>
 <footer>
@@ -279,6 +333,37 @@
             alert('Ошибка создания объявления! Попробуйте еще раз позже.');
         });
     });
+
+
+    function deleteApartment(apartmentId) {
+    if (confirm('Вы уверены, что хотите удалить это объявление?')) {
+        fetch('/api/v1/apartments/${apartmentId}/', {
+    method: 'DELETE',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': 'ваш_CSRF_токен', // Если используется защита от CSRF
+    },
+})
+.then(response => {
+    if (response.ok) {
+        // Обработка успешного удаления объекта
+        console.log('Объект успешно удален');
+    } else {
+        // Обработка ошибок
+        console.error('Ошибка удаления объекта');
+    }
+})
+.catch(error => {
+    console.error('Ошибка:', error);
+    alert('Ошибка удаления объекта! Попробуйте еще раз позже.');
+});
+
+    }
+}
+
+
+
 </script>
 </body>
 </html>
+

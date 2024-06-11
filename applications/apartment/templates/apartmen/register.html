@@ -106,11 +106,12 @@
             <label for="password_confirm">Подтверждение пароля:</label>
             <input type="password" id="password_confirm" name="password_confirm" required>
 
-            <label for="name">Имя:</label>
+            <label for="name">ФИО:</label>
             <input type="text" id="name" name="name" required>
 
-            <label for="surname">Фамилия:</label>
-            <input type="text" id="surname" name="surname" required>
+            <label for="surname">Номер телефона:</label>
+            <input type="text" id="surname" name="surname" pattern="[0-9]{10}" title="Номер должен состоять из 10 цифр" required>
+
 
             <button type="submit">Зарегистрироваться</button>
         </form>

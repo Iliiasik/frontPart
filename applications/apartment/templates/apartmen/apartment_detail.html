@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>{{ apartment.title }}</title>
     <style>
         body {
@@ -57,10 +58,22 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .apartment-images {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
         .apartment-images img {
-            max-width: 100%;
-            margin-bottom: 10px;
+            width: calc(25% - 20px);
+            height: 200px;
+            margin-bottom: 20px;
             border-radius: 8px;
+            cursor: pointer;
+            object-fit: cover;
+        }
+        .modal-content img {
+            width: 100%;
+            height: auto;
         }
         .footer-content {
             background-color: #333;
@@ -91,6 +104,12 @@
         .btn-new:hover {
             box-shadow: #4281f8 0 0px 0px 40px inset;
         }
+        .image-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -101,31 +120,38 @@
             </a>
         </div>
         <div class="profile-button">
-            <button class="profile-button" onclick="window.location.href='/profile/'">
-                <span>Личный кабинет</span>
-            </button>
-        </div>
+                {% if user.is_authenticated %}
+                    <button class="btn-new" onclick="window.location.href='/api/v1/account/profile/'">
+                        Привет, {{ user.name }}!
+                    </button>
+    <!--                <button class="btn-new logout-button" onclick="logout()">-->
+    <!--                Выйти-->
+    <!--                </button>-->
+                {% else %}
+                    <button class="btn-new" onclick="window.location.href='/api/v1/account/login/'">
+                        Личный кабинет
+                    </button>
+                {% endif %}
+            </div>
     </header>
 
     <main>
         <section class="apartment-detail">
             <h1>{{ apartment.title }}</h1>
-            <div class="apartment-images">
-                {% for image in apartment.images.all %}
-                <img src="{{ image.image.url }}" width="275" height="275" style="border-radius: 21%; display: inline-block;">
-                {% endfor %}
+            <div class="image-container">
+                <div class="apartment-images">
+                    {% for image in apartment.images.all %}
+                    <img src="{{ image.image.url }}" onclick="showModal('{{ image.image.url }}')" alt="Apartment Image">
+                    {% endfor %}
+                </div>
             </div>
-            <p><strong>Хозяин:</strong> {{ apartment.owner.username }}</p>
-            <p><strong>Категория:</strong> {{ apartment.category.name }}</p>
-            <p><strong>Местоположение:</strong> {{ apartment.location }}</p>
-            <p><strong>Цена:</strong> {{ apartment.price }} сом</p>
-            <p><strong>Цена в долларах:</strong> {{ apartment.price_dollar }} $</p>
-                {% for amenity in apartment.amenities.all %}
-                    {{ amenity.name }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </p>
-            <p><strong>Description:</strong> {{ apartment.description }}</p>
-            <p><strong>Views:</strong> {{ apartment.count_views }}</p>
+            <p><strong>Хозяин: </strong>{{ apartment.owner.name }}. <p>Номер телефона: +996{{apartment.owner.surname}}</p></p>
+            <p><strong>Категория: </strong> {{ apartment.category.name }}</p>
+            <p><strong>Местоположение: </strong> {{ apartment.location }}</p>
+            <p><strong>Цена: </strong> {{ apartment.price }} сом</p>
+            <p><strong>Цена в долларах: </strong> {{ apartment.price_dollar }} $</p>
+            <p><strong>Описание:</strong> {{ apartment.description }}</p>
+            <p><strong>Просмотры:</strong> {{ apartment.count_views }}</p>
         </section>
     </main>
 
@@ -143,5 +169,28 @@
             </div>
         </div>
     </footer>
+
+    <!-- Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="" id="modalImage" alt="Modal Image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function showModal(imageUrl) {
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = imageUrl;
+            $('#imageModal').modal('show');
+        }
+    </script>
 </body>
 </html>
+

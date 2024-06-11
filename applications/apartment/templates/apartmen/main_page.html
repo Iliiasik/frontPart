@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Главная страница</title>
     <link rel="stylesheet" href="{% static 'apartment/css/main_page.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         /* Общий стиль для карточек */
         .apartment-card {
@@ -41,6 +42,16 @@
             font-family: "Segoe UI Semibold", sans-serif;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Контейнер для всего содержимого кроме футера */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Стиль header */
@@ -108,6 +119,7 @@
         /* Стиль основного контента */
         main {
             padding: 20px;
+            flex: 1;
         }
 
         /* Стиль блока 1 */
@@ -153,7 +165,8 @@
         }
 
         /* Стиль кнопки "Подробнее" */
-        .details-button {            padding: 10px 20px; /* Увеличенный размер кнопки */
+        .details-button {
+            padding: 10px 20px; /* Увеличенный размер кнопки */
             font-size: 1rem; /* Увеличенный размер текста */
         }
 
@@ -241,11 +254,19 @@
 
         /* Стиль поиска */
         .search {
-            margin-bottom: 20px;
+            display: flex; /* Используем flexbox */
+            align-items: center; /* Выравниваем по вертикали */
+            justify-content: space-between; /* Распределяем пространство между элементами */
+            margin-bottom: 10px; /* Добавляем отступ снизу */
+            gap: 10px; /* Добавляем промежуток между элементами */
         }
 
         .search input {
-            margin-right: 10px;
+            width: calc(100% - 20px); /* Учитываем padding */
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
         }
 
         /* Стиль списка квартир */
@@ -257,68 +278,70 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <a href="/">
-                <img src="{% static 'apartment/img/logo_3.png' %}" alt="Logo" width="40" height="40">
-            </a>
-        </div>
-        <div class="buttons" style="text-align: center;">
-            <button class="btn-new" onclick="filterListings('All')">Все</button>
-            <button class="btn-new" onclick="filterListings('B&B')">B&B</button>
-            <button class="btn-new" onclick="filterListings('Houses')">Дома</button>
-            <button class="btn-new" onclick="filterListings('Views')">Виды</button>
-            <button class="btn-new" onclick="filterListings('Swimming')">Плавание</button>
-            <button class="btn-new" onclick="filterListings('Yurt')">Юрты</button>
-            <button class="btn-new" onclick="filterListings('Campings')">Кемпинги</button>
-        </div>
-        <div class="profile-button">
-            {% if user.is_authenticated %}
-                <button class="btn-new" onclick="window.location.href='/api/v1/account/profile/'">
-                    Привет, {{ user.name }}!
-                </button>
-<!--                <button class="btn-new logout-button" onclick="logout()">-->
-<!--                Выйти-->
-<!--                </button>-->
-            {% else %}
-                <button class="btn-new" onclick="window.location.href='/api/v1/account/login/'">
-                    Личный кабинет
-                </button>
-            {% endif %}
-        </div>
-    </header>
-    <main>
-        <section class="search">
-            <input type="text" id="search-input" placeholder="Поиск..." value="{{ search_query }}" oninput="searchListings()">
-            <input type="number" id="min-price" placeholder="Мин. цена" oninput="searchListings()">
-            <input type="number" id="max-price" placeholder="Макс. цена" oninput="searchListings()">
-            <div id="search-results"></div>
-        </section>
-
-        <section class="apartments">
-            <h2>{{ category_name }}</h2>
-            <div class="apartment-list">
-                {% if no_apartments %}
-                    <p>Упс, вы здесь первый!</p>
+    <div class="content">
+        <header>
+            <div class="logo">
+                <a href="/">
+                    <img src="{% static 'apartment/img/logo_3.png' %}" alt="Logo" width="40" height="40">
+                </a>
+            </div>
+            <div class="buttons" style="text-align: center;">
+                <button class="btn-new" onclick="filterListings('All')">Все</button>
+                <button class="btn-new" onclick="filterListings('B&B')">B&B</button>
+                <button class="btn-new" onclick="filterListings('Houses')">Дома</button>
+                <button class="btn-new" onclick="filterListings('Views')">Виды</button>
+                <button class="btn-new" onclick="filterListings('Swimming')">Плавание</button>
+                <button class="btn-new" onclick="filterListings('Yurt')">Юрты</button>
+                <button class="btn-new" onclick="filterListings('Campings')">Кемпинги</button>
+            </div>
+            <div class="profile-button">
+                {% if user.is_authenticated %}
+                    <button class="btn-new" onclick="window.location.href='/api/v1/account/profile/'">
+                        Привет, {{ user.name }}!
+                    </button>
+    <!--                <button class="btn-new logout-button" onclick="logout()">-->
+    <!--                Выйти-->
+    <!--                </button>-->
                 {% else %}
-                    {% for apartment in apartments %}
-                        <div class="apartment-card">
-                            {% if apartment.images.all %}
-                                <div style="text-align: center;">
-                                    <img src="{{ apartment.images.all.0.image.url }}" width="275" height="275" style="border-radius: 21%; display: inline-block;">
-                                </div>
-                            {% endif %}
-                            <h3>{{ apartment.title }}</h3>
-                            <p>Местоположение: {{ apartment.location }}</p>
-                            <p>Цена: {{ apartment.price }} сом</p>
-                            <p>Цена в долларах: {{ apartment.price_dollar }} $</p>
-                            <div style="text-align: center;"><a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a></div>
-                        </div>
-                    {% endfor %}
+                    <button class="btn-new" onclick="window.location.href='/api/v1/account/login/'">
+                        Личный кабинет
+                    </button>
                 {% endif %}
             </div>
-        </section>
-    </main>
+        </header>
+        <main>
+            <section class="search">
+                <input type="text" id="search-input" placeholder="Поиск..." value="{{ search_query }}" oninput="searchListings()">
+                <input type="number" id="min-price" placeholder="Мин. цена" oninput="searchListings()">
+                <input type="number" id="max-price" placeholder="Макс. цена" oninput="searchListings()">
+                <div id="search-results"></div>
+            </section>
+
+            <section class="apartments">
+                <h2>{{ category_name }}</h2>
+                <div class="apartment-list">
+                    {% if no_apartments %}
+                        <p>Упс, вы здесь первый!</p>
+                    {% else %}
+                        {% for apartment in apartments %}
+                            <div class="apartment-card">
+                                {% if apartment.images.all %}
+                                    <div style="text-align: center;">
+                                        <img src="{{ apartment.images.all.0.image.url }}" width="275" height="275" style="border-radius: 21%; display: inline-block;">
+                                    </div>
+                                {% endif %}
+                                <h3>{{ apartment.title }}</h3>
+                                <p>Местоположение: {{ apartment.location }}</p>
+                                <p>Цена: {{ apartment.price }} сом</p>
+                                <p>Цена в долларах: {{ apartment.price_dollar }} $</p>
+                                <div style="text-align: center;"><a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a></div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </section>
+        </main>
+    </div>
 
     <footer>
         <div class="footer-content">
@@ -327,7 +350,7 @@
                 <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/your_number" target="_blank">WhatsApp</a></p>
                 <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/your_profile" target="_blank">Instagram</a></p>
                 <p><i class="far fa-envelope"></i> <a href="mailto:your_email@example.com">Email</a></p>
-                <p><i class="fab fa-telegram-plane"></i> <a href="https://t.me/whyupepe" target="_blank">Telegram</a></p>
+                <p><i class="fab а-telegram-plane"></i> <a href="https://t.me/whyupepe" target="_blank">Telegram</a></p>
             </div>
             <div class="footer-text">
                 <p>© 2024, «Nedvizhimost»™. Все права защищены.</p>
@@ -427,5 +450,3 @@
     </script>
 </body>
 </html>
-
-
