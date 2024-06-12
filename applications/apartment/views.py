@@ -15,7 +15,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework import mixins
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.utils import translation
 from django.db.models import Q
@@ -24,6 +24,25 @@ from django.db.models import Q
 logger = logging.getLogger(__name__)
 
 from django.shortcuts import render
+
+# views.py
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+
+from django.http import HttpResponseNotAllowed, HttpResponseBadRequest
+# @csrf_exempt
+# def delete_apartment(request, pk):
+#     if request.method == 'DELETE':
+#         try:
+#             apartment = Apartment.objects.get(pk=pk)
+#             apartment.delete()
+#             return HttpResponse(status=204)  # No content
+#         except Apartment.DoesNotExist:
+#             return HttpResponseBadRequest("Apartment does not exist")
+#     else:
+#         return HttpResponseNotAllowed(['DELETE'])
+
 
 
 def main_page(request):
@@ -70,10 +89,21 @@ def main_page(request):
 
     return render(request, 'apartmen/main_page.html', context)
 from django.shortcuts import render, get_object_or_404
-def apartment_detail(request, pk):
-    apartment = get_object_or_404(Apartment, pk=pk)
-    return render(request, 'apartmen/apartment_detail.html', {'apartment': apartment})
 
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+
+def apartment_detail(request, pk):
+    if request.method == 'GET':
+        apartment = get_object_or_404(Apartment, pk=pk)
+        return render(request, 'apartmen/apartment_detail.html', {'apartment': apartment})
+
+    elif request.method == 'DELETE':
+        apartment = get_object_or_404(Apartment, pk=pk)
+        apartment.delete()
+        return JsonResponse({'message': 'Apartment deleted successfully'}, status=204)
 # applications/apartment/views.py
 
 
@@ -179,7 +209,7 @@ class ApartmentAPIVIew(viewsets.ModelViewSet):
         logger.info(f"Apartment updated by user {self.request.user.username}: {serializer.data}")
 
     def perform_destroy(self, instance):
-        logger.info(f"Apartment deleted by user {self.request.user.username}: {instance}")
+        logger.info(f"Apartment deleted by user {self.request.user.name}: {instance}")
         instance.delete()
 
 

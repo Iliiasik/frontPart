@@ -161,7 +161,6 @@
             <span>Выйти</span>
         </button>
         {% if user.is_authenticated %}
-
             <button class="btn-new" onclick="openModal('listingModal')">
                 Выставить объявление
             </button>
@@ -189,35 +188,34 @@
 
     {% if user.is_authenticated %}
     <section class="your-listings">
-    <h2 style="text-align: center; border: 1px solid #ccc; padding: 10px;">Ваши объявления</h2>
-    <div class="apartment-list">
-        {% with apartments=user.apartment_set.all %}
-            {% if apartments %}
-                {% for apartment in apartments %}
-                    <div class="apartment-card">
-                        {% if apartment.images.all %}
+        <h2 style="text-align: center; border: 1px solid #ccc; padding: 10px;">Ваши объявления</h2>
+        <div class="apartment-list">
+            {% with apartments=user.apartment_set.all %}
+                {% if apartments %}
+                    {% for apartment in apartments %}
+                        <div class="apartment-card">
+                            {% if apartment.images.all %}
+                                <div style="text-align: center;">
+                                    <img src="{{ apartment.images.all.0.image.url }}" width="275" height="275" style="border-radius: 21%; display: inline-block;">
+                                </div>
+                            {% endif %}
+                            <h3>{{ apartment.title }}</h3>
+                            <p>Местоположение: {{ apartment.location }}</p>
+                            <p>Цена: {{ apartment.price }} сом</p>
+                            <p>Цена в долларах: {{ apartment.price_dollar }} $</p>
+                            <p>Описание: {{ apartment.description }}</p>
                             <div style="text-align: center;">
-                                <img src="{{ apartment.images.all.0.image.url }}" width="275" height="275" style="border-radius: 21%; display: inline-block;">
+                                <a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a>
+                                    <button class="btn-new" onclick="deleteApartment('{{ apartment.id }}')">Удалить</button>
                             </div>
-                        {% endif %}
-                        <h3>{{ apartment.title }}</h3>
-                        <p>Местоположение: {{ apartment.location }}</p>
-                        <p>Цена: {{ apartment.price }} сом</p>
-                        <p>Цена в долларах: {{ apartment.price_dollar }} $</p>
-                        <p>Описание: {{ apartment.description }}</p>
-                        <div style="text-align: center;">
-                            <a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a>
-                            <button class="btn-new" onclick="deleteApartment('{{ apartment.id }}')">Удалить</button>
                         </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p style="text-align: center;">У вас пока нет объявлений.</p>
-            {% endif %}
-        {% endwith %}
-    </div>
-</section>
-
+                    {% endfor %}
+                {% else %}
+                    <p style="text-align: center;">У вас пока нет объявлений.</p>
+                {% endif %}
+            {% endwith %}
+        </div>
+    </section>
     {% endif %}
 </main>
 <footer>
@@ -245,35 +243,60 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('listingModal')">&times;</span>
         <h2>Выставить объявление</h2>
-        <form id="createListingForm">
-            <label for="title">Заголовок:</label>
-            <input type="text" id="title" name="title" required>
+        <form id="createListingForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">Заголовок:</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
 
-            <label for="category">Категория:</label>
-            <select id="category" name="category_id" required>
-                <option value="">Выберите категорию</option>
-                <option value="B&B">B&B</option>
-            </select>
+            <div class="form-group">
+                <label for="category">Категория:</label>
+                <select id="category" class="form-control" name="category_id" required>
+                    <option value="">Выберите категорию</option>
+                    <option value="B&B">B&B</option>
+                    <option value="Campings">Кемпинги</option>
+                    <option value="Yurt">Юрты</option>
+                    <option value="Views">Виды</option>
+                    <option value="Swimming">Плавание</option>
+                    <option value="Houses">Дома</option>
+                </select>
+            </div>
 
-            <label for="location">Местоположение:</label>
-            <input type="text" id="location" name="location" required>
+            <div class="form-group">
+                <label for="location">Местоположение:</label>
+                <input type="text" class="form-control" id="location" name="location" required>
+            </div>
 
-            <label for="price">Цена (сом):</label>
-            <input type="number" id="price" name="price" required>
+            <div class="form-group">
+                <label for="price">Цена (сом):</label>
+                <input type="number" class="form-control" id="price" name="price" required>
+            </div>
 
-            <label for="price_dollar">Цена ($):</label>
-            <input type="number" id="price_dollar" name="price_dollar" required>
+            <div class="form-group">
+                <label for="price_dollar">Цена ($):</label>
+                <input type="number" class="form-control" id="price_dollar" name="price_dollar" required>
+            </div>
 
-            <label for="education">Образование:</label>
-            <input type="text" id="education" name="education" required>
+            <div class="form-group">
+                <label for="education">Характеристики:</label>
+                <input type="text" class="form-control" id="education" name="education" required>
+            </div>
 
-            <label for="description">Описание:</label>
-            <textarea id="description" name="description" rows="4" required></textarea>
+            <div class="form-group">
+                <label for="description">Описание:</label>
+                <textarea id="description" class="form-control" name="description" rows="4" required></textarea>
+            </div>
 
-            <button type="submit" class="btn-new">Создать объявление</button>
+            <div class="form-group">
+                <label for="images">Фотографии:</label>
+                <input type="file" class="form-control" id="images" name="images" multiple required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Создать объявление</button>
         </form>
     </div>
 </div>
+
 
 <script>
     function openModal(modalId) {
@@ -297,73 +320,75 @@
     }
 
     document.getElementById('createListingForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-        const data = {
-            title: formData.get('title'),
-            category_id: formData.get('category_id'),
-            location: formData.get('location'),
-            price: formData.get('price'),
-            price_dollar: formData.get('price_dollar'),
-            education: formData.get('education'),
-            description: formData.get('description')
-        };
-        fetch('/api/v1/listings/create/', {
-            method: 'POST',
+    event.preventDefault();
+    const formData = new FormData(this);
+    fetch('/api/v1/account/profile/', { // Используем тот же адрес, что и при создании объявления
+        method: 'POST', // Используем метод POST
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            closeModal('listingModal');
+            location.reload(); // Обновляем страницу после добавления объявления
+        } else {
+            return response.json().then(data => {
+                alert('Ошибка добавления объявления: ' + JSON.stringify(data));
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Ошибка добавления объявления! Попробуйте еще раз позже.');
+    });
+});
+
+
+   function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Ищем куку с нужным именем
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function deleteApartment(apartmentId) {
+    if (confirm('Вы уверены, что хотите удалить это объявление?')) {
+        var csrftoken = getCookie('csrftoken'); // Получаем CSRF-токен из куки
+        fetch(`/api/v1/apartment/apartment/${apartmentId}/`, {
+            method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
+                'X-CSRFToken': csrftoken // Устанавливаем CSRF-токен в заголовок запроса
             },
-            body: JSON.stringify(data)
         })
         .then(response => {
             if (response.ok) {
-                // Обработка успешного создания объявления
-                closeModal('listingModal');
-                location.reload(); // Перезагрузка страницы для обновления списка объявлений
+                // Удаление элемента DOM после успешного удаления объявления
+                const apartmentElement = document.getElementById(`apartment-${apartmentId}`);
+                if (apartmentElement) {
+                    apartmentElement.remove();
+                }
             } else {
-                // Обработка ошибок
-                return response.json().then(data => {
-                    alert('Ошибка создания объявления: ' + JSON.stringify(data));
-                });
+                console.error('Ошибка удаления объекта');
             }
         })
         .catch(error => {
             console.error('Ошибка:', error);
-            alert('Ошибка создания объявления! Попробуйте еще раз позже.');
+            alert('Ошибка удаления объекта! Попробуйте еще раз позже.');
         });
-    });
-
-
-    function deleteApartment(apartmentId) {
-    if (confirm('Вы уверены, что хотите удалить это объявление?')) {
-        fetch('/api/v1/apartments/${apartmentId}/', {
-    method: 'DELETE',
-    headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': 'ваш_CSRF_токен', // Если используется защита от CSRF
-    },
-})
-.then(response => {
-    if (response.ok) {
-        // Обработка успешного удаления объекта
-        console.log('Объект успешно удален');
-    } else {
-        // Обработка ошибок
-        console.error('Ошибка удаления объекта');
-    }
-})
-.catch(error => {
-    console.error('Ошибка:', error);
-    alert('Ошибка удаления объекта! Попробуйте еще раз позже.');
-});
-
     }
 }
-
-
 
 </script>
 </body>
 </html>
-

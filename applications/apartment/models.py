@@ -4,7 +4,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 User = get_user_model()
 
-
 class Category(models.Model):
     """
         Модель категории

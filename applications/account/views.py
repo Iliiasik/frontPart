@@ -16,6 +16,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
+from ..apartment.models import Apartment, PostImage
 
 User = get_user_model()
 
@@ -67,9 +68,35 @@ def login_view(request):
     return render(request, 'apartmen/login.html')
 
 def profile_view(request):
-    return render(request, 'apartmen/profile.html')
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        category_id = request.POST.get('category_id')
+        location = request.POST.get('location')
+        price = request.POST.get('price')
+        price_dollar = request.POST.get('price_dollar')
+        education = request.POST.get('education')
+        description = request.POST.get('description')
+        images = request.FILES.getlist('images')
 
+        owner_id = request.user.id
 
+        new_apartment = Apartment.objects.create(
+            owner_id=owner_id,
+            title=title,
+            category_id=category_id,
+            location=location,
+            price=price,
+            price_dollar=price_dollar,
+            education=education,
+            description=description
+        )
+
+        for image in images:
+            post_image = PostImage.objects.create(image=image, post_id=new_apartment.id)
+
+        return JsonResponse({'message': 'Apartment added successfully'}, status=201)
+    else:
+        return render(request, 'apartmen/profile.html')
 def register_view(request):
     return render(request, 'apartmen/register.html')
 
