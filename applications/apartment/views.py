@@ -94,10 +94,11 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-
 def apartment_detail(request, pk):
     if request.method == 'GET':
         apartment = get_object_or_404(Apartment, pk=pk)
+        apartment.count_views += 1
+        apartment.save()
         return render(request, 'apartmen/apartment_detail.html', {'apartment': apartment})
 
     elif request.method == 'DELETE':

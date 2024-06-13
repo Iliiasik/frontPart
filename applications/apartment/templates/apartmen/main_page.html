@@ -317,29 +317,35 @@
                 <div id="search-results"></div>
             </section>
 
-            <section class="apartments">
-                <h2>{{ category_name }}</h2>
-                <div class="apartment-list">
-                    {% if no_apartments %}
-                        <p>Упс, вы здесь первый!</p>
-                    {% else %}
-                        {% for apartment in apartments %}
-                            <div class="apartment-card">
-                                {% if apartment.images.all %}
-                                    <div style="text-align: center;">
-                                        <img src="{{ apartment.images.all.0.image.url }}" width="275" height="275" style="border-radius: 21%; display: inline-block;">
-                                    </div>
-                                {% endif %}
-                                <h3>{{ apartment.title }}</h3>
-                                <p>Местоположение: {{ apartment.location }}</p>
-                                <p>Цена: {{ apartment.price }} сом</p>
-                                <p>Цена в долларах: {{ apartment.price_dollar }} $</p>
-                                <div style="text-align: center;"><a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a></div>
-                            </div>
-                        {% endfor %}
+           <section class="apartments">
+    <h2>{{ category_name }}</h2>
+    <div class="apartment-list">
+        {% if no_apartments %}
+            <p>Упс, вы здесь первый!</p>
+        {% else %}
+            {% for apartment in apartments %}
+                <div class="apartment-card">
+                    {% if apartment.images.all %}
+                        <div style="text-align: center;">
+                            <img src="{{ apartment.images.all.0.image.url }}" width="275" height="275" style="border-radius: 21%; display: inline-block;">
+                        </div>
                     {% endif %}
+                    <h3>{{ apartment.title }}</h3>
+                    <p>Местоположение: {{ apartment.location }}</p>
+                    <p>Цена: {{ apartment.price }} сом</p>
+                    <p>Цена в долларах: {{ apartment.price_dollar }} $</p>
+                    <div style="text-align: center;">
+                        <a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a>
+                        {% if user.is_superuser %}
+                            <button class="btn-new" style="background-color: #ff3333;" onclick="deleteApartment('{{ apartment.id }}')">Удалить</button>
+                        {% endif %}
+                    </div>
                 </div>
-            </section>
+            {% endfor %}
+        {% endif %}
+    </div>
+</section>
+
         </main>
     </div>
 
@@ -359,6 +365,7 @@
     </footer>
 
     <script>
+
         function filterListings(category) {
             const searchQuery = document.getElementById('search-input').value;
             const minPrice = document.getElementById('min-price').value;
@@ -447,6 +454,48 @@
 //         console.error('Произошла ошибка:', error);
 //     });
 // }
+        function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Ищем куку с нужным именем
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function deleteApartment(apartmentId) {
+    if (confirm('Вы уверены, что хотите удалить это объявление?')) {
+        var csrftoken = getCookie('csrftoken'); // Получаем CSRF-токен из куки
+        fetch(`/api/v1/apartment/apartment/${apartmentId}/`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': csrftoken // Устанавливаем CSRF-токен в заголовок запроса
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                // Удаление элемента DOM после успешного удаления объявления
+                const apartmentElement = document.getElementById(`apartment-${apartmentId}`);
+                if (apartmentElement) {
+                    apartmentElement.remove();
+                }
+            } else {
+                console.error('Ошибка удаления объекта');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Ошибка удаления объекта! Попробуйте еще раз позже.');
+        });
+    }
+}
     </script>
 </body>
 </html>

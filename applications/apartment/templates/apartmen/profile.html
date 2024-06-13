@@ -170,6 +170,9 @@
 <main>
     <div class="user-profile">
         <h2>Данные пользователя</h2>
+        {% if user.is_superuser %}
+        <h5 style="color: #5e5efc; font-weight: bold; margin-top: 10px; text-align: center; border: 2px solid #5e5efc; padding: 5px; display: inline-block;">Администрация</h5>
+    {% endif %}
         <table>
             <tr>
                 <th>ФИО:</th>
@@ -183,7 +186,9 @@
                 <th>Email:</th>
                 <td>{{ user.email }}</td>
             </tr>
+
         </table>
+
     </div>
 
     {% if user.is_authenticated %}
