@@ -9,272 +9,312 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         /* Общий стиль для карточек */
-        .apartment-card {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            margin: 10px;
-            width: calc(33.33% - 20px); /* 33.33% ширина для каждой карточки с отступом */
-            display: inline-block;
-            vertical-align: top; /* Выравниваем карточки по верху */
-            box-sizing: border-box; /* Включаем отступы и рамку в расчет ширины */
-            text-align: left; /* Выравниваем текст по левому краю */
-        }
+.apartment-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    box-sizing: border-box;
+    text-align: left;
+    width: calc(33.33% - 20px);
+    display: inline-block;
+    vertical-align: top;
+}
 
-        /* Clearfix для предотвращения переноса */
-        .apartment-list::after {
-            content: "";
-            display: table;
-            clear: both;
-        }
+/* Медиа-запрос для мобильных устройств */
+@media (max-width: 767px) {
+    .apartment-card {
+        width: calc(100% - 20px); /* 100% ширина для мобильных устройств с отступом */
+    }
 
-        /* Стиль изображений квартир */
-        .apartment-images img {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 5px;
-            border-radius: 3px;
-        }
+    .banner-container {
+        flex-direction: column; /* Размещаем баннеры в колонку */
+    }
 
-        /* Основной стиль body */
-        body {
-            font-family: "Segoe UI Semibold", sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+    .service-cards {
+        flex-direction: column;
+    }
 
-        /* Контейнер для всего содержимого кроме футера */
-        .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
+    .service-card {
+        flex: 1 1 auto; /* Карточки услуг занимают всю ширину */
+        margin: 10px 0;
+    }
+}
 
-        /* Стиль header */
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+/* Медиа-запрос для планшетов */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .apartment-card {
+        width: calc(50% - 20px); /* 50% ширина для планшетов с отступом */
+    }
 
-        /* Стиль логотипа */
-        .logo img {
-            max-width: 80px;
-            max-height: 50px;
-        }
-        .logo {
-            margin-right: 20px; /* Добавляем отступ справа */
-        }
+    .banner-container {
+        flex-direction: row;
+    }
 
-        /* Стиль кнопок */
-        .buttons button {
-            margin-right: 10px;
-            padding: 10px 20px; /* Увеличенный размер кнопки */
-            font-size: 1rem; /* Увеличенный размер текста */
-            font-family: "Segoe UI Semibold", sans-serif;
-        }
+    .service-cards {
+        flex-direction: row;
+    }
 
-        /* Стиль кнопки профиля */
-        .profile-button {
-            margin-left: auto;
-        }
+    .service-card {
+        flex: 1 1 calc(50% - 20px); /* Карточки услуг занимают 50% ширины */
+    }
+}
 
-        .profile-button button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 14px 28px; /* Увеличенный размер кнопки */
-            font-size: 14px; /* Увеличенный размер текста */
-            border-radius: 10px; /* Скругление углов */
-            cursor: pointer; /* Изменение курсора при наведении */
-            transition: background-color 0.3s ease; /* Плавное изменение цвета фона */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
-            font-family: "Segoe UI Semibold", sans-serif;
-        }
+/* Clearfix для предотвращения переноса */
+.apartment-list::after {
+    content: "";
+    display: table;
+    clear: both;
+}
 
-        .profile-button button:hover {
-            background-color: #45a049; /* Изменение цвета фона при наведении */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Увеличение тени при наведении */
-        }
+/* Стиль изображений квартир */
+.apartment-images img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
 
-        /* Стиль кнопки выхода */
-        .logout-button {
-            background-color: #ff3333;
-        }
+/* Основной стиль body */
+body {
+    font-family: "Segoe UI Semibold", sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-        /* Стиль слогана */
-        .slogan {
-            text-align: center;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
+/* Контейнер для всего содержимого кроме футера */
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 
-        /* Стиль основного контента */
-        main {
-            padding: 20px;
-            flex: 1;
-        }
+/* Стиль header */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        /* Стиль блока 1 */
-        .block1 {
-            margin-bottom: 20px;
-        }
+/* Стиль логотипа */
+.logo img {
+    max-width: 80px;
+    max-height: 50px;
+}
+.logo {
+    margin-right: 20px; /* Добавляем отступ справа */
+}
 
-        /* Стиль контейнера баннера */
-        .banner-container {
-            display: flex;
-            overflow-x: auto;
-        }
+/* Стиль кнопок */
+.buttons button {
+    margin-right: 10px;
+    padding: 10px 20px; /* Увеличенный размер кнопки */
+    font-size: 1rem; /* Увеличенный размер текста */
+    font-family: "Segoe UI Semibold", sans-serif;
+}
 
-        /* Стиль баннера */
-        .banner img {
-            width: 100%;
-            max-width: 300px;
-            margin-right: 10px;
-        }
+/* Стиль кнопки профиля */
+.profile-button {
+    margin-left: auto;
+}
 
-        /* Стиль блока 2 */
-        .block2 {
-            margin-bottom: 20px;
-        }
+.profile-button button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 14px 28px; /* Увеличенный размер кнопки */
+    font-size: 14px; /* Увеличенный размер текста */
+    border-radius: 10px; /* Скругление углов */
+    cursor: pointer; /* Изменение курсора при наведении */
+    transition: background-color 0.3s ease; /* Плавное изменение цвета фона */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+    font-family: "Segoe UI Semibold", sans-serif;
+}
 
-        /* Стиль карточек услуг */
-        .service-cards {
-            display: flex;
-            flex-wrap: wrap;
-        }
+.profile-button button:hover {
+    background-color: #45a049; /* Изменение цвета фона при наведении */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Увеличение тени при наведении */
+}
 
-        /* Стиль карточки услуги */
-        .service-card {
-            flex: 1 1 300px;
-            margin: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
+/* Стиль кнопки выхода */
+.logout-button {
+    background-color: #ff3333;
+}
 
-        .service-card p {
-            margin: 0;
-        }
+/* Стиль слогана */
+.slogan {
+    text-align: center;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
 
-        /* Стиль кнопки "Подробнее" */
-        .details-button {
-            padding: 10px 20px; /* Увеличенный размер кнопки */
-            font-size: 1rem; /* Увеличенный размер текста */
-        }
+/* Стиль основного контента */
+main {
+    padding: 20px;
+    flex: 1;
+}
 
-        /* Стиль блока 3 */
-        .block3 {
-            text-align: center;
-        }
+/* Стиль блока 1 */
+.block1 {
+    margin-bottom: 20px;
+}
 
-        /* Стиль баннера 2 */
-        .banner2 img {
-            max-width: 100%;
-        }
+/* Стиль контейнера баннера */
+.banner-container {
+    display: flex;
+    overflow-x: auto;
+}
 
-        /* Стиль подвала */
-        footer {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-            font-size: 14px;
-        }
+/* Стиль баннера */
+.banner img {
+    width: 100%;
+    max-width: 300px;
+    margin-right: 10px;
+}
 
-        /* Стиль контента подвала */
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+/* Стиль блока 2 */
+.block2 {
+    margin-bottom: 20px;
+}
 
-        /* Стиль текста подвала и контактной информации */
-        .footer-text, .contact-info {
-            line-height: 1.6;
-            padding: 10px;
-            font-size: 14px;
-        }
+/* Стиль карточек услуг */
+.service-cards {
+    display: flex;
+    flex-wrap: wrap;
+}
 
-        .footer-text p, .contact-info p {
-            margin: 5px 0;
-        }
+/* Стиль карточки услуги */
+.service-card {
+    flex: 1 1 300px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
 
-        /* Стиль контактной информации */
-        .contact-info {
-            margin-top: 20px;
-        }
+.service-card p {
+    margin: 0;
+}
 
-        .contact-info p {
-            margin: 0;
-            padding: 0 10px; /* Добавляем отступы между пунктами */
-        }
+/* Стиль кнопки "Подробнее" */
+.details-button {
+    padding: 10px 20px; /* Увеличенный размер кнопки */
+    font-size: 1rem; /* Увеличенный размер текста */
+}
 
-        /* Стиль ссылок в контактной информации */
-        .contact-info a {
-            color: #fff;
-            text-decoration: none;
-            margin-left: 5px; /* Добавляем небольшой отступ между и текстом ссылки */
-        }
+/* Стиль блока 3 */
+.block3 {
+    text-align: center;
+}
 
-        /* Новый стиль кнопок */
-        .btn-new {
-            border-radius: 10px;
-            color: white;
-            transition: .2s linear;
-            background: #659ff8;
-            padding: 8px 16px;
-            font-size: 1rem;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-        }
+/* Стиль баннера 2 */
+.banner2 img {
+    max-width: 100%;
+}
 
-        .btn-new:hover {
-            box-shadow: #4281f8 0 0px 0px 40px inset;
-        }
+/* Стиль подвала */
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+}
 
-        /* Стиль фильтров */
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+/* Стиль контента подвала */
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-        .filters button {
-            margin: 5px;
-        }
+/* Стиль текста подвала и контактной информации */
+.footer-text, .contact-info {
+    line-height: 1.6;
+    padding: 10px;
+    font-size: 14px;
+}
 
-        /* Стиль поиска */
-        .search {
-            display: flex; /* Используем flexbox */
-            align-items: center; /* Выравниваем по вертикали */
-            justify-content: space-between; /* Распределяем пространство между элементами */
-            margin-bottom: 10px; /* Добавляем отступ снизу */
-            gap: 10px; /* Добавляем промежуток между элементами */
-        }
+.footer-text p, .contact-info p {
+    margin: 5px 0;
+}
 
-        .search input {
-            width: calc(100% - 20px); /* Учитываем padding */
-            padding: 8px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
+/* Стиль контактной информации */
+.contact-info {
+    margin-top: 20px;
+}
 
-        /* Стиль списка квартир */
-        .apartment-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
+.contact-info p {
+    margin: 0;
+    padding: 0 10px; /* Добавляем отступы между пунктами */
+}
+
+/* Стиль ссылок в контактной информации */
+.contact-info a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 5px; /* Добавляем небольшой отступ между и текстом ссылки */
+}
+
+/* Новый стиль кнопок */
+.btn-new {
+    border-radius: 10px;
+    color: white;
+    transition: .2s linear;
+    background: #659ff8;
+    padding: 8px 16px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-new:hover {
+    box-shadow: #4281f8 0 0px 0px 40px inset;
+}
+
+/* Стиль фильтров */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.filters button {
+    margin: 5px;
+}
+
+/* Стиль поиска */
+.search {
+    display: flex; /* Используем flexbox */
+    align-items: center; /* Выравниваем по вертикали */
+    justify-content: space-between; /* Распределяем пространство между элементами */
+    margin-bottom: 10px; /* Добавляем отступ снизу */
+    gap: 10px; /* Добавляем промежуток между элементами */
+}
+
+.search input {
+    width: calc(100% - 20px); /* Учитываем padding */
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Стиль списка квартир */
+.apartment-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
     </style>
 </head>
 <body>
