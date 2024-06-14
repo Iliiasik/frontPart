@@ -5,7 +5,7 @@ from django.core.mail import EmailMessage
 
 
 def send_activation_code(email, code):
-    message = f'Перейдите по данной ссылке для активации аккаунта: \n\n http://http://34.125.101.248/:8000/api/v1/account/activate/{code}'
+    message = f'Перейдите по данной ссылке для активации аккаунта: \n\n //http://34.125.101.248/:8000/api/v1/account/activate/{code}'
 
     email_message = EmailMessage(
         'Nedvizhimost',
@@ -22,7 +22,7 @@ def send_activation_code(email, code):
 def send_forgot_password_code(email, code):
     send_mail(
         'Nedvizhimost',
-        f'Вот ваш код для востоновления пароля, никому не показывайте его: {code}',
+        f'Вот ваш код для восстановления пароля, никому не показывайте его: {code}',
         'iptest228228@gmail.com',
         [email]
     )
