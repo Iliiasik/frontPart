@@ -28,8 +28,7 @@ SECRET_KEY = config('SECRET_KEY', default='test secret key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-#ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
-ALLOWED_HOSTS = ['34.125.91.154']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
 
 LOGIN_REDIRECT_URL = '/api/v1/account/user-info/'
@@ -115,24 +114,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': config('DB_NAME'),
-#         'USER': config('DB_USER'),
-#         'PASSWORD': config('DB_PASS'),
-#         'HOST': config('DB_HOST'),
-#         'PORT': config('DB_PORT')
-#     }
-# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Nedvizhimost',
-        'USER': 'lyasek',
-        'PASSWORD': '1739',
-        'HOST': 'localhost',
-        'PORT': '',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASS'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT')
     }
 }
 
