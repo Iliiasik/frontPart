@@ -5,7 +5,7 @@ from django.core.mail import EmailMessage
 
 
 def send_activation_code(email, code):
-    message = f'Перейдите по данной ссылке для активации аккаунта: \n\n //http://34.125.101.248/:8000/api/v1/account/activate/{code}'
+    message = f'Перейдите по данной ссылке для активации аккаунта: \n\n //http://34.125.101.248:8000/api/v1/account/activate/{code}'
 
     email_message = EmailMessage(
         'Nedvizhimost',
