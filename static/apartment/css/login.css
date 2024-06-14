@@ -1,0 +1,62 @@
+/* static/css/main.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.form-signin {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-signin-heading {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-control {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.btn {
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    margin-top: 10px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.button-group a {
+    color: #007bff;
+    text-decoration: none;
+}

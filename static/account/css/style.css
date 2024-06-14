@@ -1,0 +1,120 @@
+/* static/apartment/css/styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header, footer {
+    background-color: #333;
+    color: white;
+    padding: 1em 0;
+    text-align: center;
+}
+
+header .logo img {
+    width: 50px;
+    height: 50px;
+}
+
+header .profile-button {
+    float: right;
+    margin-right: 20px;
+}
+
+header .profile-button button {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    cursor: pointer;
+}
+
+header .profile-button button:hover {
+    background-color: #555;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+form {
+    background-color: white;
+    padding: 2em;
+    margin: 2em auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+}
+
+form input, form button {
+    width: 100%;
+    padding: 1em;
+    margin: 0.5em 0;
+    border: 1px solid #ddd;
+}
+
+form button {
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #444;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background-color: white;
+    margin: 1em 0;
+    padding: 1em;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 2em;
+}
+
+.footer-content .contact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-content .contact-info p {
+    margin: 0.5em 0;
+}
+
+.footer-content .contact-info a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-content .footer-text {
+    text-align: right;
+}
+
+.footer-content .footer-text p {
+    margin: 0;
+}
