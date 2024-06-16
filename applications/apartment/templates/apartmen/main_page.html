@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="{% static 'apartment/css/main_page.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+       .category-title {
+    border-top: 1.5px solid #565555; /* Линия сверху */
+    border-bottom: 1.5px solid #565555; /* Линия снизу */
+    width: 50%; /* Пример ширины, можно настроить под нужды */
+    margin: 0 auto; /* Центрируем по горизонтали */
+    text-align: center; /* Выравнивание текста по центру */
+    padding: 10px 0; /* Отступы внутри рамки */
+}
+
         /* Общий стиль для карточек */
 .apartment-card {
     background-color: #f9f9f9;
@@ -40,6 +49,66 @@
         flex: 1 1 auto; /* Карточки услуг занимают всю ширину */
         margin: 10px 0;
     }
+    header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.logo {
+    order: 1; /* Логотип первый */
+    margin-right: 10px;
+}
+.btn-new {
+    border-radius: 5px;
+    color: white;
+    transition: .2s linear;
+    background: #659ff8;
+    padding: 4px 8px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+.profile-button {
+    order: 2; /* Кнопка личного кабинета вторая */
+}
+.profile-button button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 3px 6px; /* Увеличенный размер кнопки */
+    font-size: 14px; /* Увеличенный размер текста */
+    border-radius: 5px; /* Скругление углов */
+    cursor: pointer; /* Изменение курсора при наведении */
+    transition: background-color 0.3s ease; /* Плавное изменение цвета фона */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+    margin-bottom: 4px;
+    font-family: "Segoe UI Semibold", sans-serif;
+}
+.buttons {
+    order: 3; /* Кнопки категорий третьи */
+    display: flex;
+    overflow-x: auto;
+    justify-content: center;
+}
+.buttons button {
+    font-size: 0.45rem; /* Уменьшаем размер текста кнопок в два раза */
+    padding: 2px 4px; /* Уменьшаем размер кнопок в два раза */
+    margin-right: 2.5px; /* Уменьшаем отступ между кнопками */
+}
+
+.profile-button button {
+    font-size: 0.45rem; /* Уменьшаем размер текста кнопки личного кабинета в два раза */
+    padding: 2px 4px; /* Уменьшаем размер кнопки личного кабинета в два раза */
+}
+.search input {
+    width: calc(100% - 10px); /* Уменьшаем ширину полей ввода поиска */
+    padding: 6px;
+}
+
 }
 
 /* Медиа-запрос для планшетов */
@@ -312,9 +381,24 @@ footer {
 .apartment-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-}
 
+}
+ .delete-button {
+        background-color: #659ff8; /* Синий цвет по умолчанию */
+        transition: background-color 0.3s ease; /* Плавное изменение цвета фона */
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        font-size: 1rem;
+        border-radius: 10px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .delete-button:hover {
+        background-color: #ff3333; /* Красный цвет при наведении */
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2); /* Тень при наведении */
+    }
     </style>
 </head>
 <body>
@@ -328,11 +412,11 @@ footer {
             <div class="buttons" style="text-align: center;">
                 <button class="btn-new" onclick="filterListings('All')">Все</button>
                 <button class="btn-new" onclick="filterListings('B&B')">B&B</button>
-                <button class="btn-new" onclick="filterListings('Houses')">Дома</button>
-                <button class="btn-new" onclick="filterListings('Views')">Виды</button>
-                <button class="btn-new" onclick="filterListings('Swimming')">Плавание</button>
-                <button class="btn-new" onclick="filterListings('Yurt')">Юрты</button>
-                <button class="btn-new" onclick="filterListings('Campings')">Кемпинги</button>
+                <button class="btn-new" onclick="filterListings('Дома')">Дома</button>
+                <button class="btn-new" onclick="filterListings('Виды')">Виды</button>
+                <button class="btn-new" onclick="filterListings('Плавание')">Плавание</button>
+                <button class="btn-new" onclick="filterListings('Юрты')">Юрты</button>
+                <button class="btn-new" onclick="filterListings('Кемпинги')">Кемпинги</button>
             </div>
             <div class="profile-button">
                 {% if user.is_authenticated %}
@@ -358,7 +442,9 @@ footer {
             </section>
 
            <section class="apartments">
-    <h2>{{ category_name }}</h2>
+                   <div class="category-title">
+    <h3>{{ category_name }}</h3>
+                   </div>
     <div class="apartment-list">
         {% if no_apartments %}
             <p>Упс, вы здесь первый!</p>
@@ -377,7 +463,7 @@ footer {
                     <div style="text-align: center;">
                         <a href="{% url 'apartment_detail' apartment.id %}" class="btn-new">Подробнее</a>
                         {% if user.is_superuser %}
-                            <button class="btn-new" style="background-color: #ff3333;" onclick="deleteApartment('{{ apartment.id }}')">Удалить</button>
+                        <button class="btn-new delete-button" onclick="deleteApartment('{{ apartment.id }}')">Удалить</button>
                         {% endif %}
                     </div>
                 </div>
@@ -459,25 +545,26 @@ footer {
                 });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.getElementById('search-input');
-            const minPriceInput = document.getElementById('min-price');
-            const maxPriceInput = document.getElementById('max-price');
-            const urlParams = new URLSearchParams(window.location.search);
-            const searchQuery = urlParams.get('search');
-            const minPrice = urlParams.get('min_price');
-            const maxPrice = urlParams.get('max_price');
+        document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const minPriceInput = document.getElementById('min-price');
+    const maxPriceInput = document.getElementById('max-price');
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchQuery = urlParams.get('search');
+    const minPrice = urlParams.get('min_price');
+    const maxPrice = urlParams.get('max_price');
 
-            if (searchQuery) {
-                searchInput.value = searchQuery;
-            }
-            if (minPrice) {
-                minPriceInput.value = minPrice;
-            }
-            if (maxPrice) {
-                maxPriceInput.value = maxPrice;
-            }
-        });
+    if (searchQuery) {
+        searchInput.value = searchQuery;
+    }
+    if (minPrice) {
+        minPriceInput.value = minPrice;
+    }
+    if (maxPrice) {
+        maxPriceInput.value = maxPrice;
+    }
+});
+
 //         function logout() {
 //     fetch('/', {
 //         method: 'POST', // Метод запроса для завершения сеанса (обычно POST)

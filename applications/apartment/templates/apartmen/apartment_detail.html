@@ -7,12 +7,17 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>{{ apartment.title }}</title>
     <style>
+        .section-content .field-label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
         body {
             font-family: "Segoe UI Semibold", sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
         }
+
         header {
             background-color: #333;
             color: #fff;
@@ -21,18 +26,22 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .logo img {
             height: 40px;
         }
+
         .buttons button {
             margin-right: 10px;
             padding: 10px 20px;
             font-size: 1rem;
             font-family: "Segoe UI Semibold", sans-serif;
         }
+
         .profile-button {
             margin-left: auto;
         }
+
         .profile-button button {
             background-color: #4CAF50;
             color: white;
@@ -45,24 +54,53 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             font-family: "Segoe UI Semibold", sans-serif;
         }
+
         .profile-button button:hover {
             background-color: #45a049;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
+
         main {
             padding: 20px;
         }
+
         .apartment-detail {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .apartment-images {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
         }
+
+        .left-side {
+            width: 100%;
+        }
+
+        .section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .section-content {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .apartment-images {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+        }
+
         .apartment-images img {
             width: calc(25% - 20px);
             height: 200px;
@@ -71,26 +109,32 @@
             cursor: pointer;
             object-fit: cover;
         }
+
         .modal-content img {
             width: 100%;
             height: auto;
         }
+
         .footer-content {
             background-color: #333;
             color: #fff;
             padding: 20px;
             text-align: center;
         }
+
         .contact-info p, .footer-text p {
             margin: 5px 0;
         }
+
         .contact-info a, .footer-text a {
             color: #fff;
             text-decoration: none;
         }
+
         .contact-info a:hover, .footer-text a:hover {
             text-decoration: underline;
         }
+
         .btn-new {
             border-radius: 10px;
             color: white;
@@ -101,9 +145,11 @@
             border: none;
             cursor: pointer;
         }
+
         .btn-new:hover {
             box-shadow: #4281f8 0 0px 0px 40px inset;
         }
+
         .image-container {
             border: 1px solid #ccc;
             padding: 20px;
@@ -120,39 +166,73 @@
             </a>
         </div>
         <div class="profile-button">
-                {% if user.is_authenticated %}
-                    <button class="btn-new" onclick="window.location.href='/api/v1/account/profile/'">
-                        Привет, {{ user.name }}!
-                    </button>
-    <!--                <button class="btn-new logout-button" onclick="logout()">-->
-    <!--                Выйти-->
-    <!--                </button>-->
-                {% else %}
-                    <button class="btn-new" onclick="window.location.href='/api/v1/account/login/'">
-                        Личный кабинет
-                    </button>
-                {% endif %}
-            </div>
+            {% if user.is_authenticated %}
+                <button class="btn-new" onclick="window.location.href='/api/v1/account/profile/'">
+                    Привет, {{ user.name }}!
+                </button>
+            {% else %}
+                <button class="btn-new" onclick="window.location.href='/api/v1/account/login/'">
+                    Личный кабинет
+                </button>
+            {% endif %}
+        </div>
     </header>
 
     <main>
-        <section class="apartment-detail">
-            <h1>{{ apartment.title }}</h1>
-            <div class="image-container">
-                <div class="apartment-images">
-                    {% for image in apartment.images.all %}
-                    <img src="{{ image.image.url }}" onclick="showModal('{{ image.image.url }}')" alt="Apartment Image">
-                    {% endfor %}
+      <section class="apartment-detail">
+            <div class="left-side">
+
+                <div id="apartmentCarousel" class="carousel slide d-block d-md-none" data-ride="carousel">
+                    <div class="image-container">
+  <div class="carousel-inner">
+    {% for image in apartment.images.all %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <img src="{{ image.image.url }}" class="d-block w-100" alt="Apartment Image">
+    </div>
+    {% endfor %}
+  </div>
+  <a class="carousel-control-prev" href="#apartmentCarousel" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#apartmentCarousel" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+                    </div>
+
+<!-- Existing layout for desktops -->
+<div class="image-container d-none d-md-block">
+  <div class="apartment-images">
+    {% for image in apartment.images.all %}
+    <img src="{{ image.image.url }}" onclick="showModal('{{ image.image.url }}')" alt="Apartment Image">
+    {% endfor %}
+  </div>
+</div>
+                <div class="section">
+                    <div class="section-title">Детали недвижимости</div>
+                    <div class="section-content">
+                        <p><span class="field-label">Название:</span> <input type="text" class="form-control" value="{{ apartment.title }}" readonly></p>
+                        <p><span class="field-label">Местоположение:</span> <input type="text" class="form-control" value="{{ apartment.location }}" readonly></p>
+                        <p><span class="field-label">Категория:</span> <input type="text" class="form-control" value="{{ apartment.category.name }}" readonly></p>
+                        <p><span class="field-label">Характеристики:</span> <input type="text" class="form-control" value="{{ apartment.education }}" readonly></p>
+                        <p><span class="field-label">Описание:</span> <textarea class="form-control" readonly>{{ apartment.description }}</textarea></p>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">Контактные данные и стоимость</div>
+                    <div class="section-content">
+                        <p><span class="field-label">Владелец:</span> <input type="text" class="form-control" value="{{ apartment.owner.name }}" readonly></p>
+                        <p><span class="field-label">Номер телефона:</span> <input type="text" class="form-control" value="+996{{ apartment.owner.surname }}" readonly></p>
+                        <p><span class="field-label">Цена:</span> <input type="text" class="form-control" value="{{ apartment.price }} сом" readonly></p>
+                        <p><span class="field-label">Цена в долларах:</span> <input type="text" class="form-control" value="{{ apartment.price_dollar }} $" readonly></p>
+                        <p><span class="field-label">Просмотры:</span> <input type="text" class="form-control" value="{{ apartment.count_views }}" readonly></p>
+                    </div>
                 </div>
             </div>
-            <p><strong>Хозяин: </strong>{{ apartment.owner.name }}. <p>Номер телефона: +996{{apartment.owner.surname}}</p></p>
-            <p><strong>Категория: </strong> {{ apartment.category.name }}</p>
-            <p><strong>Местоположение: </strong> {{ apartment.location }}</p>
-            <p><strong>Цена: </strong> {{ apartment.price }} сом</p>
-            <p><strong>Цена в долларах: </strong> {{ apartment.price_dollar }} $</p>
-            <p><strong>Описание:</strong> {{ apartment.description }}</p>
-            <p><strong>Просмотры:</strong> {{ apartment.count_views }}</p>
         </section>
+
     </main>
 
     <footer>
@@ -161,7 +241,8 @@
                 <p>Свяжитесь с нами:</p>
                 <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/your_number" target="_blank">WhatsApp</a></p>
                 <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/your_profile" target="_blank">Instagram</a></p>
-                <p><i class="far fa-envelope"></i> <a href="mailto:your_email@example.com">Email</a></p>
+                <p><i class="far fa-envelope"></i> <a href="mailto:your_email@example.com">Email
+</a></p>
                 <p><i class="fab fa-telegram-plane"></i> <a href="https://t.me/whyupepe" target="_blank">Telegram</a></p>
             </div>
             <div class="footer-text">
