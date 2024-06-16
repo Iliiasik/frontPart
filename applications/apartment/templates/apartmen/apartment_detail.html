@@ -232,7 +232,40 @@
                 </div>
             </div>
         </section>
-
+<div class="section">
+                    <div class="section-title">Комментарии</div>
+                    <div class="section-content">
+                        {% if user.is_authenticated %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="body">Комментарий:</label>
+                                    <textarea id="body" name="body" class="form-control" rows="3" placeholder="Введите ваш комментарий..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Добавить комментарий</button>
+                            </form>
+                        {% else %}
+                            <p>Войдите, чтобы оставить комментарий.</p>
+                        {% endif %}
+                        <hr>
+                        <h5>Комментарии:</h5>
+                        {% for comment in comments %}
+                            <div class="comment mb-3">
+                                <p><strong>{{ comment.owner.name }}</strong> сказал:</p>
+                                <p>{{ comment.body }}</p>
+                                <p><small>{{ comment.created_at }}</small></p>
+                                {% if user == comment.owner or user == apartment.owner %}
+                                    <form method="post" action="{% url 'delete_comment' pk=apartment.pk comment_id=comment.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        {% empty %}
+                            <p>Нет комментариев.</p>
+                        {% endfor %}
+                    </div>
+                </div>
     </main>
 
     <footer>

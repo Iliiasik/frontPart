@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 import logging
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -94,17 +95,45 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
+
+@login_required
+def delete_comment(request, pk, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    apartment = comment.apartment
+
+    if request.user == comment.owner or request.user == apartment.owner:
+        comment.delete()
+        return redirect('apartment_detail', pk=pk)
+    else:
+        return JsonResponse('message:'"Вы не можете удалить этот комментарий.")
 def apartment_detail(request, pk):
     if request.method == 'GET':
         apartment = get_object_or_404(Apartment, pk=pk)
         apartment.count_views += 1
         apartment.save()
-        return render(request, 'apartmen/apartment_detail.html', {'apartment': apartment})
+        comments = apartment.comments.all()
+        return render(request, 'apartmen/apartment_detail.html', {
+            'apartment': apartment,
+            'comments': comments
+        })
+
+    elif request.method == 'POST':
+        apartment = get_object_or_404(Apartment, pk=pk)
+        body = request.POST.get('body')
+        if body:
+            new_comment = Comment.objects.create(
+                owner=request.user,
+                apartment=apartment,
+                body=body
+            )
+        return redirect('apartment_detail', pk=apartment.pk)
 
     elif request.method == 'DELETE':
         apartment = get_object_or_404(Apartment, pk=pk)
         apartment.delete()
         return JsonResponse({'message': 'Apartment deleted successfully'}, status=204)
+
+
 # applications/apartment/views.py
 
 
